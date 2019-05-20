@@ -3,6 +3,12 @@ from Crypto.Signature import PKCS1_PSS
 from Crypto.PublicKey import RSA
 from Crypto import Random
 from Crypto.Hash import SHA256
+import random
+import math
+import sympy
+import egcd
+import time
+
 
 
 
@@ -14,7 +20,15 @@ def saveInFile(fileName, data):
 	file = open(fileName+".pem", "wb")
 	file.write(data)
 	file.close()
-	
+
+def saveInFile(fileName, data):
+	"""
+	fileName : string, name of the file in which we are going to save data in. 
+	(data could be the RSA key)
+	"""
+	file = open(fileName+".pem", "w")
+	file.write(data)
+	file.close()	
 	
 	
 def RSAKeyCreation(PW = None):
@@ -39,6 +53,19 @@ def RSAFetchKeyFromFile(fileName, PW = None):
 	key = RSA.importKey(file.read(), PW)
 	file.close()
 	return key
+	
+def RSAFetchKeyFromFileTxt(fileName):
+	"""
+	fileName : string, name of the file in which the RSA key is saved
+	PW : String, password for the file, None by default  
+	return : the key it self(private and public) and the public key
+	"""
+	file = open(fileName+".pem", "r")
+	key = int(file.read())
+	file.close()
+	return key	
+	
+	
 	
 def RSASign(key, message):
 	"""
@@ -66,15 +93,103 @@ def RSAVerify(key, message, signature):
 	verifier  = PKCS1_PSS.new(key)
 	if verifier.verify(h, signature):
 		print("The signature is authentic.")
+		print(message)
 		return True
 	else:
 		print("The signature is not authentic!")
 		return False
 		
-"""
-## Key creation
-		
-exportedPrivateKey, exportedPublicKey, key = RSAKeyCreation()
-saveInFile("privateKey", exportedPrivateKey)
-saveInFile("publicKey", exportedPublicKey)
-"""
+
+
+
+def get_big_prime(length: int):
+		p = random.getrandbits(length)
+		p = p | 1
+		while not sympy.isprime(p):
+			p += 2
+		return p
+def generate_keys(length):
+		"""
+		Generate RSA keys
+		:param length: int, bitlength of RSA keys
+		:return: n, e, d
+		"""
+		p = get_big_prime(length // 2)
+		q = get_big_prime(length // 2)
+
+		n = p * q
+		phi_n = (p - 1) * (q - 1)
+
+		e = random.randint(2, phi_n - 1)
+		while not math.gcd(e, phi_n) == 1:
+			e = random.randint(2, phi_n - 1)
+
+		_, x, _ = egcd.egcd(e, phi_n)
+		d = x % phi_n
+
+		return n, e, d
+
+
+def main():	
+	
+	"""
+	## Key creation
+			
+	exportedPrivateKey, exportedPublicKey, key = RSAKeyCreation()
+	saveInFile("privateKey", exportedPrivateKey)
+	saveInFile("publicKey", exportedPublicKey)
+	"""	
+	#n, e, d = generate_keys(1024)
+	#saveInFile("n1", str(n))
+	#saveInFile("e1", str(e))
+	#saveInFile("d1", str(d))
+	
+	n = RSAFetchKeyFromFileTxt("n")
+	e = RSAFetchKeyFromFileTxt("e1")
+	d = RSAFetchKeyFromFileTxt("d")
+	for i in range(30000):
+		a  = pow(132, d, n)
+	#key = RSAFetchKeyFromFile("privateKey")
+	#pub = RSAFetchKeyFromFile("publicKey")
+	#msg = "132"
+	#start = time.time()
+	
+	#a = RSASign(key, msg)
+	#print(a)
+	#t = time.time() - start
+
+	 #Measure-Command {start-process python utils.py -Wait}
+
+
+	"""
+	print(a)
+	print("******************************")
+	print(b)
+
+	RSAVerify(pub, msg, a)
+	RSAVerify(pub, msg, b)
+	
+	10000 132 d
+	3018.2578   no sig
+	35027.0176  all
+	33028.3306  sig + one time all - sig
+	1016.5637   one time all
+	
+	30000 132 d
+	.   no sig
+	.  all
+	33028.3306  sig + one time all - sig
+	.   one time all
+	
+	30000 132 d1 smaller 
+	.   no sig
+	.  all
+	33028.3306  sig + one time all - sig
+	.   one time all
+	
+	"""
+
+	
+	
+if __name__ == "__main__":
+	main()
