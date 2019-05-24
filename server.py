@@ -5,11 +5,28 @@ import time
 import utils 
 
 
-def FetchPublicKey():
-	return utils.RSAFetchKeyFromFile("publicKey")
+def FetchPublicKey(file):
+	return utils.RSAFetchKeyFromFileTxt("e"+str(file)), utils.RSAFetchKeyFromFileTxt("n"+str(file))
+	
+def RSAVerify(e, n, message, signature):
+	"""
+	Key: RSA public key
+	message: list that contains strings
+	signature : signature encoded as a string
+	return bool
+	"""			
+	verifier = pow(signature, e, n)
+	if verifier == message:
+		print("The signature is authentic.")
+		print(message)
+		return True
+	else:
+		#print("The signature is not authentic!")
+		return False
 
 def main():
-	PublicKey = FetchPublicKey()
+	keyNumb = 1500
+	e, n = FetchPublicKey(keyNumb)
 	
 	
 	soc = socket.socket()  
@@ -29,15 +46,14 @@ def main():
 	print("Connected to ",address)
 	while True:
 		try:
-			msg = client.recv(1000)
+			msg = client.recv(1024)
 			state, sig = pickle.loads(msg)
-			utils.RSAVerify(PublicKey, state, sig)
-			print(state)
+			RSAVerify(e, n, int(state), sig)
 			
-		except EOFError or KeyboardInterrupt :
+		except KeyboardInterrupt or EOFError  :
 			client.close()
 			soc.close()
-			sys.exit(1)
+			sys.exit()
 		
 		
 if __name__ == '__main__':	

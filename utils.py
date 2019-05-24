@@ -144,10 +144,10 @@ def main():
 	#saveInFile("e1", str(e))
 	#saveInFile("d1", str(d))
 	
-	n = RSAFetchKeyFromFileTxt("n")
-	e = RSAFetchKeyFromFileTxt("e1")
-	d = RSAFetchKeyFromFileTxt("d")
-	for i in range(30000):
+	n = RSAFetchKeyFromFileTxt("n1100")
+	e = RSAFetchKeyFromFileTxt("e1100")
+	d = RSAFetchKeyFromFileTxt("d1100")
+	for i in range(10000):
 		a  = pow(132, d, n)
 	#key = RSAFetchKeyFromFile("privateKey")
 	#pub = RSAFetchKeyFromFile("publicKey")
@@ -191,5 +191,5 @@ def main():
 
 	
 	
-if __name__ == "__main__":
-	main()
+#if __name__ == "__main__":
+#	main()
