@@ -36,3 +36,4 @@ Same hardware must be used (explained in the report)
 - SimpleClient.py can be considered as a normal client application for a microcontroller 
 - attackClient.py is used by the attacker to generate private-keys
 - i2c.py and adc.py were provided form https://github.com/Seeed-Studio/grove.py/tree/master/grove
+- gasSensorMq2.py can be used if the setup is complete(Raspberry-pi + gas sensor + grove base hat) it will print out the gas consentration
