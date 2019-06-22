@@ -18,6 +18,7 @@ The following libraries are required:
 - sympy
 - egcd
 - random
+- pyshark
 - pycrypto 
 - RPi.GPIO
 
