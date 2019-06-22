@@ -25,7 +25,7 @@ def RSAVerify(e, n, message, signature):
 		return False
 
 def main():
-	keyNumb = 1500
+	keyNumb = 11000
 	e, n = FetchPublicKey(keyNumb)
 	
 	
@@ -36,10 +36,10 @@ def main():
 	else:
 		host = sys.argv[1]
 		port = int(sys.argv[2])
-	name = socket.gethostname()
-	ip = socket.gethostbyname(name)
-	print(ip)
-	soc.bind((ip, port)) # Bind IP address to the port
+	#name = socket.gethostname()
+	#ip = socket.gethostbyname(name)
+	print(host)
+	soc.bind((host, port)) # Bind IP address to the port
 	print(socket.gethostname())
 	soc.listen(5)
 	client, address = soc.accept()     # Establish connection with client.

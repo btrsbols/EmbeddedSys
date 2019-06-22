@@ -56,7 +56,7 @@ class ADC(object):
     '''
     def __init__(self, address = 0x04):
         self.address = address
-        self.bus = grove.i2c.Bus()
+        self.bus = i2c.Bus()
 
     def read_raw(self, channel):
         '''

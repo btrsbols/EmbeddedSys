@@ -12,10 +12,10 @@ def FetchPrivateKey(file):
 	
 def main():
 	
-	average_time = 0.27884094
-	keyNumb = 11000     #name of the key
+	average_time = 0.0006692609667778016
+	keyNumb = 1100
 	d, n = FetchPrivateKey(keyNumb)
-	inc = len(str(n))-1 # to increment the value of the key
+	inc = len(str(n))-1
 	inc = pow(10, inc)
 	
 	soc = socket.socket()  
@@ -32,20 +32,16 @@ def main():
 	Continue = True
 	while Continue:
 		time_begin = time.time()
-		for i in range(1000):  # average by 1000
+		for i in range(5000):
 			try:
-				time.sleep(.2)
-				sig = pow(132, d, n)  # 132 is the gas concentration, hard coded
-				msg = pickle.dumps([132, sig])
-				soc.send(msg)
+				sig = pow(132, d, n)
 				
 			except KeyboardInterrupt:
 				soc.close()
 				sys.exit(1)
 		time_end = time.time()
 		elapsed = time_end - time_begin	
-		average = elapsed / 1000
-		
+		average = elapsed / 5000
 		print(average)
 		if average < average_time:
 			d += inc

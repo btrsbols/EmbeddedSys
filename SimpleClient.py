@@ -4,6 +4,7 @@ import pickle
 import time
 import utils
 import math
+import os
 
 
 def FetchPrivateKey(file):
@@ -12,7 +13,7 @@ def FetchPrivateKey(file):
 	
 	
 def main():
-	keyNumb = 1500
+	keyNumb = 11000   # name of the key
 	d, n = FetchPrivateKey(keyNumb)
 	
 	
@@ -27,24 +28,24 @@ def main():
 	soc.connect((host, port)) # connect IP address to the port
 	
 	while True:
-		time_begin = time.time()
-		for i in range(500):
-			try:
-				time.sleep(.2)
-				sig = pow(132, d, n)
-				msg = pickle.dumps([132, sig])
-				soc.send(msg)
-				
-			except KeyboardInterrupt:
-				soc.close()
-				sys.exit(1)
-		time_end = time.time()
-		elapsed = time_end - time_begin	
-		average = elapsed / 500
-		print(average)
+		#time_begin = time.time()
+		#for i in range(500):
+		try:
+			time.sleep(.2)
+			sig = pow(132, d, n)    # 132 is the gas concentration, hard coded
+			msg = pickle.dumps([132, sig])
+			soc.send(msg)
+			
+		except KeyboardInterrupt:
+			soc.close()
+			sys.exit(1)
+		#time_end = time.time()
+		#elapsed = time_end - time_begin	
+		#average = elapsed / 500
+		#print(average)
 		
 	
 	
 if __name__ == '__main__':	
-	
+	os.nice(-20)
 	main()

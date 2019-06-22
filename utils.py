@@ -10,9 +10,17 @@ import egcd
 import time
 
 
+def hammingWeight(key):
+	"""
+	return the Hamming Weight of the key
+	"""
+	c = 0
+	while Key :
+		c += 1
+		key &= key - 1
+	return c
 
-
-def saveInFile(fileName, data):
+def saveInFileBit(fileName, data):
 	"""
 	fileName : string, name of the file in which we are going to save data in. 
 	(data could be the RSA key)
@@ -101,7 +109,7 @@ def RSAVerify(key, message, signature):
 		
 
 
-
+# Second implementation
 def get_big_prime(length: int):
 		p = random.getrandbits(length)
 		p = p | 1
@@ -139,16 +147,18 @@ def main():
 	saveInFile("privateKey", exportedPrivateKey)
 	saveInFile("publicKey", exportedPublicKey)
 	"""	
-	#n, e, d = generate_keys(1024)
+	n, e, d = generate_keys(4096)
+	print(n, e, d)
+	time.sleep(100000)
 	#saveInFile("n1", str(n))
 	#saveInFile("e1", str(e))
 	#saveInFile("d1", str(d))
 	
-	n = RSAFetchKeyFromFileTxt("n1100")
-	e = RSAFetchKeyFromFileTxt("e1100")
-	d = RSAFetchKeyFromFileTxt("d1100")
-	for i in range(10000):
-		a  = pow(132, d, n)
+	#n = RSAFetchKeyFromFileTxt("n1100")
+	#e = RSAFetchKeyFromFileTxt("e1100")
+	#d = RSAFetchKeyFromFileTxt("d1100")
+	#for i in range(10000):
+	#	a  = pow(132, d, n)
 	#key = RSAFetchKeyFromFile("privateKey")
 	#pub = RSAFetchKeyFromFile("publicKey")
 	#msg = "132"
